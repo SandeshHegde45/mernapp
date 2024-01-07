@@ -4,7 +4,6 @@ export default function card(props) {
   let options = props.options;
   let priceOptions = Object.keys(options);
 
-
   return (
     <div>
       <div>
@@ -16,6 +15,7 @@ export default function card(props) {
             src={props.imgSrc}
             className="card-img-top"
             alt="..."
+            style={{ height: "150px", objectFit: "fill" }}
           />
           <div className="card-body">
             <h5 className="card-title">{props.foodName}</h5>
@@ -30,11 +30,13 @@ export default function card(props) {
                 })}
               </select>
               <select className="m-2 h-100 bg-success rounded">
-                {
-                  priceOptions.map((data) => {
-                    return <option key={data} value={data}>{data}</option>
-                  })
-                }
+                {priceOptions.map((data) => {
+                  return (
+                    <option key={data} value={data}>
+                      {data}
+                    </option>
+                  );
+                })}
               </select>
               <div className="d-inline h-100 fs-5">Total Price</div>
             </div>
