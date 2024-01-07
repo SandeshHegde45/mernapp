@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Card from "../components/card";
+import Card from "../components/Card";
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -130,9 +130,10 @@ export default function Home() {
                           className="col-12 col-md-6 col-lg-3"
                         >
                           <Card
-                            foodName={filterItems.name}
+                            foodItem={filterItems}
+                            // foodName={filterItems.name}
                             options={filterItems.options[0]}
-                            imgSrc={filterItems.img}
+                            // imgSrc={filterItems.img}
                           ></Card>
                         </div>
                       );
