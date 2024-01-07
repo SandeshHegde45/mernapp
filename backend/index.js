@@ -12,6 +12,7 @@ app.get("/", (req, res) => {
 });
 app.use(express.json());
 app.use('/api', require('./Routes/CreateUser'));
+app.use('/api', require('./Routes/DisplayData')); 
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
