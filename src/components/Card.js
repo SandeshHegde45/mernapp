@@ -35,19 +35,20 @@ export default function Card(props) {
           price: finalPrice,
           qty: qty,
           size: size,
+          img: props.foodItem.img,
         });
         return;
       }
       return;
     }
-    await dispatch({
-      type: "ADD",
-      id: props.foodItem._id,
-      name: props.foodItem.name,
-      price: finalPrice,
-      qty: qty,
-      size: size,
-    });
+      await dispatch({
+        type: "ADD",
+        id: props.foodItem._id,
+        name: props.foodItem.name,
+        price: finalPrice,
+        qty: qty,
+        size: size,
+      });
   };
   let finalPrice = qty * parseInt(options[size]);
   useEffect(() => {
