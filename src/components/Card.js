@@ -45,6 +45,7 @@ export default function Card(props) {
       setQty((prev) => prev - 1);
     }
   };
+
   // const handleAddToCart = async () => {
   //   console.log("UPDATE", props.foodItem._id);
 
@@ -99,6 +100,7 @@ export default function Card(props) {
   //     size: size,
   //   });
   // };
+  
   let finalPrice = qty * parseInt(options[size]);
 
   return (
