@@ -8,40 +8,25 @@ export default function Card(props) {
   let options = props.options;
   let priceOptions = Object.keys(options);
   const [qty, setQty] = useState(1);
-  const [size, setSize] = useState("");
-  const handleAddToCart = async () => {
-    let food = [];
-    for (const item of data) {
-      if (item.id === props.foodItem._id) {
-        food = item;
+  const [size, setSize] = useState();
 
-        break;
-      }
-    }
-    if (food.length > 0) {
-      if (food.size === size) {
-        await dispatch({
-          type: "UPDATE",
-          id: props.foodItem._id,
-          price: finalPrice,
-          qty: qty,
-        });
-        return;
-      } else if (food.size !== size) {
-        await dispatch({
-          type: "ADD",
-          id: props.foodItem._id,
-          name: props.foodItem.name,
-          price: finalPrice,
-          qty: qty,
-          size: size,
-          img: props.foodItem.img,
-        });
-        return;
-      }
-      return;
-    }
-      await dispatch({
+  useEffect(() => {
+    setSize(priceRef.current.value);
+  }, []);
+
+  const handleAddToCart = async () => {
+    let existingItem = data.find((item) => item.id === props.foodItem._id);
+
+    if (existingItem) {
+      console.log("exist", existingItem.qty, qty);
+      dispatch({
+        type: "UPDATE",
+        id: existingItem.id,
+        price: finalPrice,
+        qty: existingItem.qty + qty,
+      });
+    } else {
+      dispatch({
         type: "ADD",
         id: props.foodItem._id,
         name: props.foodItem.name,
@@ -49,17 +34,81 @@ export default function Card(props) {
         qty: qty,
         size: size,
       });
+    }
   };
+  const increment = () => {
+    setQty((prev) => prev + 1);
+  };
+
+  const decrement = () => {
+    if (qty > 1) {
+      setQty((prev) => prev - 1);
+    }
+  };
+
+  // const handleAddToCart = async () => {
+  //   console.log("UPDATE", props.foodItem._id);
+
+  //   let food = [];
+  //   for (const item of data) {
+  //     console.log("item", item,data,props.foodItem._id);
+
+  //     if (item.id === props.foodItem._id) {
+  //       food = item;
+
+  //       break;
+  //     }
+  //   }
+  //   console.log("Prev food",food, food.length,food.size);
+
+  //   if (food.length > 0) {
+  //     console.log("food", food.length,food.size);
+  //     if (food.size === size) {
+  //       console.log("UPDATE", food.size);
+
+  //       await dispatch({
+  //         type: "UPDATE",
+  //         id: props.foodItem._id,
+  //         price: finalPrice,
+  //         qty: qty,
+  //       });
+  //       return;
+  //     } else if (food.size !== size) {
+  //       console.log("ADD22", food.size);
+
+  //       await dispatch({
+  //         type: "ADD",
+  //         id: props.foodItem._id,
+  //         name: props.foodItem.name,
+  //         price: finalPrice,
+  //         qty: qty,
+  //         size: size,
+  //         img: props.foodItem.img,
+  //       });
+  //       return;
+  //     }
+  //     return;
+  //   }
+  //   console.log("ADD11", food.size);
+
+  //   await dispatch({
+  //     type: "ADD",
+  //     id: props.foodItem._id,
+  //     name: props.foodItem.name,
+  //     price: finalPrice,
+  //     qty: qty,
+  //     size: size,
+  //   });
+  // };
+  
   let finalPrice = qty * parseInt(options[size]);
-  useEffect(() => {
-    setSize(priceRef.current.value);
-  }, []);
+
   return (
     <div>
       <div>
         <div
           className="card mt-3"
-          style={{ width: "18rem", maxHeight: "360px" }}
+          style={{ width: "18rem", maxHeight: "400px" }}
         >
           <img
             src={props.foodItem.img}
@@ -67,23 +116,16 @@ export default function Card(props) {
             alt="..."
             style={{ height: "150px", objectFit: "fill" }}
           />
-          <div className="card-body">
+          <div className="m-3">
             <h5 className="card-title">{props.foodItem.name}</h5>
-            <div className="container w-100">
+            <div className="d-flex py-2 align-items-center w-100">
+              <div className="d-flex">
+                <button onClick={decrement}>-</button>
+                <div className="mx-3">{qty}</div>
+                <button onClick={increment}>+</button>
+              </div>
               <select
-                className="m-2 h-100 bg-success rounded"
-                onChange={(e) => setQty(e.target.value)}
-              >
-                {Array.from(Array(6), (e, i) => {
-                  return (
-                    <option key={i + 1} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  );
-                })}
-              </select>
-              <select
-                className="m-2 h-100 bg-success rounded"
+                className="mx-5 p-1 h-100 bg-success rounded"
                 ref={priceRef}
                 onChange={(e) => setSize(e.target.value)}
               >
@@ -95,18 +137,19 @@ export default function Card(props) {
                   );
                 })}
               </select>
-              <div className="d-inline h-100 fs-5">₹{finalPrice}/-</div>
             </div>
+            <div className="d-inline h-100 fs-5 pt-3">₹{finalPrice}/-</div>
+            <hr />
           </div>
-          <hr />
-          <div className="d-flex justify-content-between align-items-cente m-2 mt-0">
+        
+         
             <button
-              className="btn btn-success text-dark mt-0"
+              className="btn btn-warning text-dark mb-4 m-auto"
               onClick={handleAddToCart}
             >
               Add to Cart
             </button>
-          </div>
+          
         </div>
       </div>
     </div>
