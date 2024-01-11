@@ -13,23 +13,21 @@ const reducer = (state, action) => {
           qty: action.qty,
           size: action.size,
           price: action.price,
-          img: action.img,
         },
       ];
     case "REMOVE":
       let newArr = [...state];
       newArr.splice(action.index, 1);
       return newArr;
-      case "UPDATE":
+    case "UPDATE":
       let updatedItems = state.map(item => {
-        if(item.id === action.id) {
+        if (item.id === action.id && item.size === action.size) {
           return {
             ...item,
             qty: action.qty,
-            price: item.price + action.price 
+            price: item.price + action.price
           }
         }
-    
         return item;
       })
       return updatedItems;

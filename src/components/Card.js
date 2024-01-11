@@ -14,26 +14,41 @@ export default function Card(props) {
     setSize(priceRef.current.value);
   }, []);
 
+
   const handleAddToCart = async () => {
-    let existingItem = data.find((item) => item.id === props.foodItem._id);
+    let existingItem = data.find(
+      item => item.id === props.foodItem._id && item.size === size
+    );
 
     if (existingItem) {
-      console.log("exist", existingItem.qty, qty);
       dispatch({
         type: "UPDATE",
         id: existingItem.id,
+        size: existingItem.size,
         price: finalPrice,
         qty: existingItem.qty + qty,
       });
     } else {
-      dispatch({
-        type: "ADD",
-        id: props.foodItem._id,
-        name: props.foodItem.name,
-        price: finalPrice,
-        qty: qty,
-        size: size,
-      });
+      let itemWithSameId = data.find(item => item.id === props.foodItem._id);
+      if (itemWithSameId) {
+        dispatch({
+          type: "ADD",
+          id: props.foodItem._id,
+          name: props.foodItem.name,
+          price: finalPrice,
+          qty: qty,
+          size: size,
+        });
+      } else {
+        dispatch({
+          type: "ADD",
+          id: props.foodItem._id,
+          name: props.foodItem.name,
+          price: finalPrice,
+          qty: qty,
+          size: size,
+        });
+      }
     }
   };
   const increment = () => {
@@ -100,7 +115,7 @@ export default function Card(props) {
   //     size: size,
   //   });
   // };
-  
+
   let finalPrice = qty * parseInt(options[size]);
 
   return (
@@ -141,15 +156,15 @@ export default function Card(props) {
             <div className="d-inline h-100 fs-5 pt-3">₹{finalPrice}/-</div>
             <hr />
           </div>
-        
-         
-            <button
-              className="btn btn-warning text-dark mb-4 m-auto"
-              onClick={handleAddToCart}
-            >
-              Add to Cart
-            </button>
-          
+
+
+          <button
+            className="btn btn-warning text-dark mb-4 m-auto"
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </button>
+
         </div>
       </div>
     </div>
